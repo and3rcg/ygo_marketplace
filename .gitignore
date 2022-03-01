@@ -1,0 +1,9 @@
+.vscode/
+frontend/node_modules
+db.sqlite3
+.tool-versions
+data/
+*.log
+*.pyc
+.env
+__pycache__/
