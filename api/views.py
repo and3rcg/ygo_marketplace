@@ -1,6 +1,4 @@
 from django.shortcuts import render
+from .models import CardModel
 
 
-# Create your views here.
-def index(request, *args, **kwargs):
-    return render('Hello world!')

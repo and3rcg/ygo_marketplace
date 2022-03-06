@@ -6,4 +6,6 @@ data/
 *.log
 *.pyc
 .env
+notes/
 __pycache__/
+frontend/package-lock.json
