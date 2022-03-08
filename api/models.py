@@ -37,12 +37,12 @@ class CardOnSale(models.Model):
 
     user_id = models.ForeignKey(User, on_delete = models.CASCADE, verbose_name='User ID')
     card_id = models.ForeignKey(CardModel, on_delete=models.CASCADE, verbose_name='Card ID')
-    price = models.FloatField(null=False, blank=False, default=1, verbose_name='Price', validators=MinValueValidator(1))
+    price = models.FloatField(null=False, blank=False, default=1, verbose_name='Price', validators=[MinValueValidator(1)])
     card_set = models.CharField(max_length=20,null=False, blank=False, default="XXXX-000", verbose_name="Set")
     card_rarity = models.CharField(max_length=40,null=False, blank=False, default="rare", verbose_name="Rarity")
-    card_amount = models.IntegerField(validators=MinValueValidator(1))
-    card_region = models.CharField(choices=localization_choices)
-    card_condition = models.CharField(choices=condition_choices)
+    card_amount = models.IntegerField(validators=[MinValueValidator(1)])
+    card_region = models.CharField(max_length=20, choices=localization_choices)
+    card_condition = models.CharField(max_length=20, choices=condition_choices)
 
     # card_id: foreign key (CardModel) (card name maybe?) - CASCADE on delete
     # price: float
