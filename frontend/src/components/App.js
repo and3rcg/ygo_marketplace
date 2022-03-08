@@ -1,14 +1,15 @@
 import React from "react";
+import Navbar from "./Navbar"
+import WebsiteFooter from "./Footer"
 
 
-function MyComponent(props) {
+function BaseApp() {
     return (
     <div>
-        <h1>
-            Hello React!
-        </h1>
+        <Navbar></Navbar>
+        <WebsiteFooter />
     </div>
     )
 };
 
-export default MyComponent
+export default BaseApp
