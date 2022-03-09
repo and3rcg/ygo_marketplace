@@ -2,17 +2,9 @@ version: "3.9"
    
 services:
   db:
-  # short syntax: IMAGENAME:VERSION-DISTRO
-  # IMAGENAME: name of the image
-  # VERSION: version of the software
-  # DISTRO (optional): name of the distro for that container. they're usually debian based
     image: postgres:14-bullseye
 
     volumes:
-    # short syntax: SOURCE:TARGET:MODE
-    # SOURCE: local machine path that the data in TARGET will be saved to
-    # TARGET: container directory to store the data
-    # MODE: can only be two values: 'rw' (read/write) or 'ro' (read-only)
       - ./data/db:/var/lib/postgresql/data
 
     environment:
@@ -21,17 +13,15 @@ services:
       - POSTGRES_PASSWORD=postgres
 
     ports:
-    # short syntax: HOST:CONTAINER
-    # if you put ports: 6900:8000, it means that you'll access the container's 8000 port through
-    # the computer's 6900 port
       - 5432:5432
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    # TODO add "collectstatic" django command in production
+    command: bash -c "python manage.py migrate &&
+                      python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/ygo_marketplace
-
     ports:
       - "8000:8000"
     environment:

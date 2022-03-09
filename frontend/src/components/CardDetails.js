@@ -13,8 +13,6 @@ function CardDetails () {
         .then((response) => {setCardData(response)})
         }, []);
         
-    document.title = `${cardData.card_name} | Yu-Gi-Oh! Marketplace`;
-
     // testing the useParams() hook
     let dict_test = useParams();
     console.log(dict_test);
@@ -24,6 +22,7 @@ function CardDetails () {
         <div className="container">
             <h1>{cardData.card_name}</h1>
             <p className="cardEffect">{cardData.card_description}</p>
+            <img src="/images/raye.jpg" />
         </div>
     )
 }

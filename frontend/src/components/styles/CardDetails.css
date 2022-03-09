@@ -1,3 +1,7 @@
 .cardEffect {
     white-space: pre-wrap;
 }
+
+img {
+    height: 300px;
+}
