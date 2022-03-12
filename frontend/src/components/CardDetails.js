@@ -16,7 +16,8 @@ function CardDetails () {
     // testing the useParams() hook
     let dict_test = useParams();
     console.log(dict_test);
-    
+    console.log(document.cookie)
+
     
     return(
         <div className="container">

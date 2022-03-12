@@ -6,11 +6,11 @@ import { Nav, Navbar, Container } from 'react-bootstrap';
 function WebsiteNavbar() {
     return(
         <div>
-            <Navbar bg="dark" expand="lg" variant="dark" sticky="top">
+            <Navbar className="container-fluid fixed-top bg-dark text-light font-weight-600">
                 <Container>
-                    <Navbar.Brand>YGO Marketplace</Navbar.Brand>
+                    <Navbar.Brand className="text-light">YGO Marketplace</Navbar.Brand>
                     <Nav>
-                        <Nav.Link href="http://127.0.0.1:8000/api/card/9285">API test</Nav.Link>
+                        <Nav.Link href="http://127.0.0.1:8000/api/card/9285"  className="text-light">API test</Nav.Link>
                         <div className="text-light">(PH)Wishlist
                         (PH)Login</div>
                     </Nav>

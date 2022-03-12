@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import CardDetails from "./CardDetails";
 
@@ -26,3 +26,7 @@ export default AppRouter
 // Route example: add more of these if you need more paths
 // <Route path="/join" element={<RoomJoinPage />}/>
 // Don't forget to add these paths to the Django URLs so it won't block you from going there!
+
+// <Route path="register" element={<RegistrationForm />}/>
+// import RegistrationForm from "./RegistrationForm";
+// 
