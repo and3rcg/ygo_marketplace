@@ -38,11 +38,11 @@ class CardOnSale(models.Model):
     seller_id = models.ForeignKey(User, on_delete = models.CASCADE, default=0, verbose_name='Seller ID')
     card_id = models.ForeignKey(CardModel, on_delete=models.CASCADE, verbose_name='Card ID')
     price = models.FloatField(null=False, blank=False, default=1, validators=[MinValueValidator(1)], verbose_name='Price')
-    card_set = models.CharField(max_length=20,null=False, blank=False, default="XXXX-000", verbose_name="Set")
-    card_rarity = models.CharField(max_length=40,null=False, blank=False, default="rare", verbose_name="Rarity")
-    card_amount = models.IntegerField(null=False, blank=False, default=1, validators=[MinValueValidator(1)], verbose_name="Amount")
-    card_region = models.CharField(max_length=20, choices=localization_choices, verbose_name="Region")
-    card_condition = models.CharField(max_length=20, choices=condition_choices, verbose_name="Condition")
+    card_set = models.CharField(max_length=20,null=False, blank=False, default='XXXX-000', verbose_name='Set')
+    card_rarity = models.CharField(max_length=40,null=False, blank=False, default='rare', verbose_name='Rarity')
+    card_amount = models.IntegerField(null=False, blank=False, default=1, validators=[MinValueValidator(1)], verbose_name='Amount')
+    card_region = models.CharField(max_length=20, choices=localization_choices, verbose_name='Region')
+    card_condition = models.CharField(max_length=20, choices=condition_choices, verbose_name='Condition')
 
     # card_id: foreign key (CardModel) (card name maybe?) - CASCADE on delete
     # price: float
@@ -60,15 +60,16 @@ class CardOnSale(models.Model):
 
 
 class UserAddress(models.Model):
-    country = models.CharField(max_length=100, verbose_name="Country")
-    state_province = models.CharField(max_length=100, verbose_name="State/Province")
-    city = models.CharField(max_length=100, verbose_name="City")
-    street = models.CharField(max_length=100, verbose_name="Street")
-    zip_code = models.CharField(max_length=10, verbose_name="Zip Code")
+    country = models.CharField(max_length=100, verbose_name='Country')
+    state_province = models.CharField(max_length=100, verbose_name='State/Province')
+    city = models.CharField(max_length=100, verbose_name='City')
+    street = models.CharField(max_length=100, verbose_name='Street')
+    zip_code = models.CharField(max_length=10, verbose_name='Zip Code')
 
 class UserProfile(models.Model):
     user_name = models.ForeignKey(User, on_delete = models.CASCADE, verbose_name='Username')
     user_email = models.EmailField(max_length=254, verbose_name='E-mail')
+    user_full_name = models.CharField(max_length=254, default='name', verbose_name = 'Full name')
     user_sales = models.IntegerField(null=False, blank=False, default=0, verbose_name='Sales Amount')
     user_address = models.ForeignKey(UserAddress, on_delete=models.CASCADE)
 

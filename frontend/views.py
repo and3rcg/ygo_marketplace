@@ -1,6 +1,7 @@
+from .forms import RegisterUserForm
 from api.models import CardModel
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView
 
 
 # TODO: The "index" view should be a list of all cards, from the CardsOnSale method (no duplicates)
@@ -21,3 +22,20 @@ class CardDetailsView(DetailView):
 
 
 # TODO: View for card search (ListView)
+
+class RegisterUser(FormView):
+    template_name = 'frontend/register.html'
+    form_class = RegisterUserForm
+    success_url = '/register'
+    # pass the form
+    # def post(self,request)
+
+"""
+django default authentication:
+user = authenticate(username='john', password='secret')
+if user is not None:
+    # A backend authenticated the credentials
+else:
+    # No backend authenticated the credentials
+    # """
+
