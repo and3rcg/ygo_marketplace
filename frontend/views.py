@@ -22,20 +22,3 @@ class CardDetailsView(DetailView):
 
 
 # TODO: View for card search (ListView)
-
-class RegisterUser(FormView):
-    template_name = 'frontend/register.html'
-    form_class = RegisterUserForm
-    success_url = '/register'
-    # pass the form
-    # def post(self,request)
-
-"""
-django default authentication:
-user = authenticate(username='john', password='secret')
-if user is not None:
-    # A backend authenticated the credentials
-else:
-    # No backend authenticated the credentials
-    # """
-

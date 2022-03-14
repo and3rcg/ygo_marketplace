@@ -1,5 +1,7 @@
-from api.viewsets import *
+from api.viewsets import CardViewSet, UserViewSet
 from rest_framework import routers
 
-router = routers.DefaultRouter()
-router.register('card', CardViewSet)
+api_router = routers.DefaultRouter()
+
+api_router.register('card', CardViewSet)
+api_router.register('user', UserViewSet)
