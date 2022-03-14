@@ -57,13 +57,16 @@ INSTALLED_APPS = [
 ]
 
 
-# Django REST Framework and Simple JWT settings
+# Django REST Framework settings
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
 }
 
+
+# Simple JWT settings
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
 SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # tokens will stay alive for a week
     'ROTATE_REFRESH_TOKENS': True,  # users won't have to log in again if they visit within a week

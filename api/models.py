@@ -3,13 +3,6 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 
 
-class User(AbstractUser):
-    """
-    Customize the Django authentication system
-    """
-    USERNAME_FIELD = 'username'
-
-
 class UserAddress(models.Model):
     country = models.CharField(max_length=100, verbose_name='Country')
     state_province = models.CharField(max_length=100, verbose_name='State/Province')
@@ -17,15 +10,18 @@ class UserAddress(models.Model):
     street = models.CharField(max_length=100, verbose_name='Street')
     zip_code = models.CharField(max_length=10, verbose_name='Zip Code')
 
-class UserProfile(models.Model):
+
+class User(AbstractUser):
     """
+    Customize the Django authentication system
     This model will use the default values from Django's authentication system, and will add some
     profile-specific fields, such as address and sales amount
     """
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
     sales = models.IntegerField(null=False, blank=False, default=0, verbose_name='Sales Amount')
-    address = models.ForeignKey(UserAddress, on_delete=models.CASCADE)
+    address = models.ForeignKey(UserAddress, null=True, blank=True, on_delete=models.CASCADE)
+
+    USERNAME_FIELD = 'username'
 
     def __str__(self) -> str:
         return str(self.user)
