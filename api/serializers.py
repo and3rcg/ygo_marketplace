@@ -7,14 +7,12 @@ class CardSerializer(serializers.HyperlinkedModelSerializer):
         model = CardModel
         fields = ['url', 'name', 'type', 'description']
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'first_name', 'last_name', 'password', 'email', 'is_staff', 'date_joined']
+        fields = ['url', 'username', 'first_name', 'last_name', 'password', 'email']
         extra_kwargs = {
-            # 'password': {'write_only': True},
-            #'is_staff': {'write_only': True},
-            'date_joined': {'read_only': True},
+            'password': {'write_only': True},
             'email': {'required': True},
         }
     def create(self, validated_data):
@@ -27,3 +25,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+# TODO remove this when done tinkering with axios
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['url', 'username', 'first_name', 'last_name', 'password', 'email']
+        

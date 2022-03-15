@@ -1,19 +1,23 @@
-from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from django.views import View
+from rest_framework import viewsets, mixins
+from rest_framework.permissions import AllowAny
 
-from . import models, serializers
-from .models import User
+from .serializers import CardSerializer, RegisterSerializer, UserSerializer
+from .models import User, CardModel
 
 
 class CardViewSet(viewsets.ModelViewSet):
-    queryset = models.CardModel.objects.all()
-    serializer_class = serializers.CardSerializer
+    queryset = CardModel.objects.all()
+    serializer_class = CardSerializer
 
-
-class UserViewSet(viewsets.ModelViewSet): 
+class RegisterViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    http_method_names = ['post']
     queryset = User.objects.all()
-    serializer_class = serializers.UserSerializer
-    permission_classes = [IsAuthenticated]
+    serializer_class = RegisterSerializer
 
 
+# TODO remove this when done tinkering with axios
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

@@ -16,6 +16,7 @@ services:
       - 5432:5432
 
   web:
+    # image: 3.9.10-bullseye
     build: .
     # TODO add "collectstatic" django command in production
     command: bash -c "python manage.py migrate &&
