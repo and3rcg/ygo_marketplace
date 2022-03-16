@@ -70,6 +70,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # tokens will stay alive for a week
     'ROTATE_REFRESH_TOKENS': True,  # users won't have to log in again if they visit within a week
+    'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),  # prefixes for the Authorization header
 }
 
 

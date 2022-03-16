@@ -1,7 +1,7 @@
 from .forms import RegisterUserForm
 from api.models import CardModel
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, FormView
+from django.views.generic import ListView, DetailView, TemplateView
 
 
 # TODO: The "index" view should be a list of all cards, from the CardsOnSale method (no duplicates)
@@ -22,3 +22,6 @@ class CardDetailsView(DetailView):
 
 
 # TODO: View for card search (ListView)
+
+class UserRegisterView(TemplateView):
+    template_name = 'frontend/register.html'
