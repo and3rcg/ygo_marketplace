@@ -1,5 +1,4 @@
-import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../axios';
 // import CSRFTokenElement from "../../static/scripts/getCsrfToken";
@@ -15,15 +14,25 @@ function RegisterPage() {
         password: '',
     });
 
+    useEffect(() => {
+        document.title = 'Register | ' + document.title;
+    }, []);
+
     const [formData, setFormData] = useState(initialFormData);
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        // TODO remove this console.log later for security
         console.log(formData);
+
         axiosInstance
             .post('register/', formData)
             .then((response) => console.log(response))
             .catch((err) => console.log(err));
+
+        response.status == '201'
+            ? navigate('/login')
+            : console.log('Invalid data.');
     };
 
     const handleChange = (evt) => {
