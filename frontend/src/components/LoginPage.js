@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import axiosInstance from '../axios';
 
 function LoginPage() {
@@ -17,6 +16,12 @@ function LoginPage() {
     const handleSubmit = (event) => {
         event.preventDefault();
         console.log(formData);
+        axiosInstance.post('token/', formData).then((response) => {
+            localStorage.setItem('access_token', response.data.access);
+            localStorage.setItem('refresh_token', response.data.refresh);
+            axiosInstance.defaults.headers['Authorization'] =
+                'JWT ' + localStorage.getItem('access_token');
+        });
     };
 
     return (
