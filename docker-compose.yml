@@ -1,43 +1,45 @@
-version: "3.9"
-   
+version: '3.9'
+
 services:
-  db:
-    image: postgres:14-bullseye
+    db:
+        image: postgres:14-bullseye
 
-    volumes:
-      - ./data/db:/var/lib/postgresql/data
+        volumes:
+            - ./data/db:/var/lib/postgresql/data
 
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+        environment:
+            - POSTGRES_NAME=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
 
-    ports:
-      - 5432:5432
+        ports:
+            - 5432:5432
 
-  web:
-    # image: 3.9.10-bullseye
-    build: .
-    # TODO add "collectstatic" django command in production
-    command: bash -c "python manage.py migrate &&
-                      python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - .:/ygo_marketplace
-    ports:
-      - "8000:8000"
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-    depends_on:
-      - db
+    web:
+        # image: 3.9.10-bullseye
+        build: .
+        # TODO add "collectstatic" django command in production
+        command: bash -c "python manage.py migrate &&
+            python manage.py runserver 0.0.0.0:8000"
+        volumes:
+            - .:/ygo_marketplace
+        ports:
+            - '8000:8000'
+        environment:
+            - POSTGRES_NAME=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        depends_on:
+            - db
 
-  frontend:
-    build: ./frontend
-    volumes: 
-      - "./frontend:/ygo_marketplace/frontend"
-    command: npm run dev
+    frontend:
+        build: ./frontend
+        ports:
+            - '9000:8000'
+        volumes:
+            - './frontend:/ygo_marketplace/frontend'
+        command: npm run dev
 
-    depends_on:
-      - db
-      - web
+        depends_on:
+            - db
+            - web

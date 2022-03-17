@@ -1,31 +1,29 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // import app components
-import CardDetails from "./CardDetails";
-import RegisterPage from "./RegisterPage";
-
-
+import CardDetails from './CardDetails';
+import RegisterPage from './RegisterPage';
+import LoginPage from './LoginPage';
 
 // This component will house all routes of the app.
 
 function AppRouter() {
-    
-    return(
+    return (
         <div>
             <Router>
                 <Routes>
-                    <Route path="" element={<h1>Home page</h1>}/>
-                    <Route path="detail/:id" element={<CardDetails />}/>
-                    <Route path="register" element={<RegisterPage />}/>
+                    <Route path="" element={<h1>Home page</h1>} />
+                    <Route path="detail/:id" element={<CardDetails />} />
+                    <Route path="register" element={<RegisterPage />} />
+                    <Route path="login" element={<LoginPage />} />
                 </Routes>
             </Router>
         </div>
-        )
+    );
 }
 
-export default AppRouter
-
+export default AppRouter;
 
 // Route example: add more of these if you need more paths
 // <Route path="/join" element={<RoomJoinPage />}/>
