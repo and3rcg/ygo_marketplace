@@ -24,7 +24,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'username'
 
     def __str__(self) -> str:
-        return str(self.user)
+        return str(self.username)
 
 
 class CardModel(models.Model):
