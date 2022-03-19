@@ -47,13 +47,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # third-party apps
-    'rest_framework',
-
     # local apps
     'api',
     'frontend',
+
+    # third-party apps
+    'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 
@@ -68,9 +68,12 @@ REST_FRAMEWORK = {
 # Simple JWT settings
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
 SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=1),
+    # 'REFRESH_TOKEN_LIFETIME': timedelta(seconds=10),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # tokens will stay alive for a week
     'ROTATE_REFRESH_TOKENS': True,  # users won't have to log in again if they visit within a week
     'AUTH_HEADER_TYPES': ('Bearer', 'JWT'),  # prefixes for the Authorization header
+    'BLACKLIST_AFTER_ROTATION': True,  # uses the blacklist app to blacklist refreshed tokens
 }
 
 
@@ -147,7 +150,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Sao_Paulo'
 
 USE_I18N = True
 

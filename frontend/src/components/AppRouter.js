@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import CardDetails from './CardDetails';
 import RegisterPage from './RegisterPage';
 import LoginPage from './LoginPage';
+import Logout from './LogoutPage';
 
 // This component will house all routes of the app.
 
@@ -17,6 +18,7 @@ function AppRouter() {
                     <Route path="detail/:id" element={<CardDetails />} />
                     <Route path="register" element={<RegisterPage />} />
                     <Route path="login" element={<LoginPage />} />
+                    <Route path="logout" element={<Logout />} />
                 </Routes>
             </Router>
         </div>

@@ -4,7 +4,6 @@ import axiosInstance from '../axios';
 // import CSRFTokenElement from "../../static/scripts/getCsrfToken";
 
 function RegisterPage() {
-    const registerURL = 'http://127.0.0.1:8000/api/register/';
     const navigate = useNavigate();
     const initialFormData = Object.freeze({
         email: '',

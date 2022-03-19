@@ -20,6 +20,12 @@ function WebsiteNavbar() {
                         <Nav.Link className="text-light" href="/login">
                             Login
                         </Nav.Link>
+                        <Nav.Link className="text-light" href="/logout">
+                            Logout
+                        </Nav.Link>
+                        <Nav.Link className="text-light" href="/detail/9284">
+                            Card test
+                        </Nav.Link>
                         <div className="text-light">(PH)Wishlist</div>
                     </Nav>
                 </Container>

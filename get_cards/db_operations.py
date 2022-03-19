@@ -9,7 +9,7 @@ def insert_monster_card(card:dict, cursor) -> None:
     
     cursor.execute(
         "INSERT INTO public.api_cardmodel "
-        "(card_name, card_attribute, card_level, card_type, card_description, card_race, card_atk, card_def) "
+        "(name, attribute, level, type, description, race, attack, defense) "
         "VALUES "
         f"('{card['name']}', '{card['attribute']}', '{card['level']}', '{card['type']}', '{card['desc']}', '{card['race']}', {card['atk']}, {defense});"
         )
@@ -18,7 +18,7 @@ def insert_monster_card(card:dict, cursor) -> None:
 
 def insert_spell_or_trap_card(card: dict, cursor) -> None:
     cursor.execute(
-        "INSERT INTO public.api_cardmodel (card_name, card_type, card_description, card_race) "
+        "INSERT INTO public.api_cardmodel (name, type, description, race) "
         "VALUES "
         f"('{card['name']}', '{card['type']}', '{card['desc']}', '{card['race']}')"
     )
