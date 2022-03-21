@@ -5,7 +5,7 @@ from api.models import CardModel, User
 class CardSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CardModel
-        fields = ['url', 'name', 'type', 'description']
+        fields = ['url', 'name', 'type', 'description', 'image_url']
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:

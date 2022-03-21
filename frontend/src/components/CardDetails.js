@@ -13,6 +13,7 @@ function CardDetails() {
             .then((response) => setCardData(response.data));
     }, []);
 
+    console.log(cardData.image_url);
     // testing the useParams() hook
     // let dict_test = useParams();
     // console.log(dict_test);
@@ -22,7 +23,7 @@ function CardDetails() {
         <div className="container">
             <h1>{cardData.name}</h1>
             <p className="cardEffect">{cardData.description}</p>
-            <img src="/images/raye.jpg" />
+            <img src={cardData.image_url} />
         </div>
     );
 }

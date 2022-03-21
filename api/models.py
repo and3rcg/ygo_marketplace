@@ -36,6 +36,7 @@ class CardModel(models.Model):
     defense = models.IntegerField(null=True, blank=True, verbose_name='DEF')
     description = models.TextField(null=False, blank=False, default='desc', verbose_name='Effect/Description')
     type = models.CharField(max_length=100, null=False, blank=False, default='type', verbose_name='Type')
+    image_url = models.URLField(max_length=200, null=True, blank=True)
 
 
 

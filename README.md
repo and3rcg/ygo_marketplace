@@ -5,7 +5,7 @@ This website is just a personal project to guide my studies in Web development, 
 ## Objectives
 
 -   Learn about the selected tech stack;
--   Develop my self-study capabilities;
+-   Develop my self-teaching capabilities;
 -   Start off my Web developer portfolio;
 -   Getting familiar with a Linux development environment (using WSL), as well as Git.
 
@@ -22,7 +22,7 @@ Since the `SECRET_KEY` in `settings.py` is private, it is recommended to anybody
 After the secret key has been added to the local project, run the app with:
 
 ```
-docker-compose up
+docker-compose up -d
 ```
 
 Once the application is up and running, the website should be ready to navigate, but there won't be any cards. In order to add the cards from the YGOPRODeck API, use the command:
