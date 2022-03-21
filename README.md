@@ -18,4 +18,17 @@ This website is just a personal project to guide my studies in Web development, 
 
 ## Installation instructions
 
-Since the `SECRET_KEY` in `settings.py` is private, it is recommended that anybody who wishes to clone the repository creates a `.env` file in the root folder of this project, then add the line `SECRET_KEY = '<your secret key here>'`. To generate a secret key, it is recommended that users should go to a website like https://djecrety.ir\.
+Since the `SECRET_KEY` in `settings.py` is private, it is recommended to anybody who wishes to run this app locally to create a `.env` file in the root folder of this project, then add the line `SECRET_KEY = '<your secret key here>'`. To generate a secret key, it is recommended that users get a secret key from an app such as https://djecrety.ir\.  
+After the secret key has been added to the local project, run the app with:
+
+```
+docker-compose up
+```
+
+Once the application is up and running, the website should be ready to navigate, but there won't be any cards. In order to add the cards from the YGOPRODeck API, use the command:
+
+```
+docker exec backend python manage.py updatedb
+```
+
+Or you can just log into the container and run `python manage.py updatedb` from there.

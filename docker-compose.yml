@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
     db:
+        container_name: db
         image: postgres:14-bullseye
 
         volumes:
@@ -16,7 +17,7 @@ services:
             - 5432:5432
 
     web:
-        # image: 3.9.10-bullseye
+        container_name: backend
         build: .
         # TODO add "collectstatic" django command in production
         command: bash -c "python manage.py migrate &&
@@ -33,6 +34,7 @@ services:
             - db
 
     frontend:
+        container_name: frontend
         build: ./frontend
         ports:
             - '9000:8000'
