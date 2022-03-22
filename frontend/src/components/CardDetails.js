@@ -14,16 +14,14 @@ function CardDetails() {
     }, []);
 
     console.log(cardData.image_url);
-    // testing the useParams() hook
-    // let dict_test = useParams();
-    // console.log(dict_test);
-    // console.log(document.cookie);
 
     return (
-        <div className="container">
-            <h1>{cardData.name}</h1>
-            <p className="cardEffect">{cardData.description}</p>
-            <img src={cardData.image_url} />
+        <div className="container d-flex flex-row">
+            <img src={cardData.image_url} className="p-5" />
+            <div className="p-5">
+                <h1>{cardData.name}</h1>
+                <p className="cardEffect">{cardData.description}</p>
+            </div>
         </div>
     );
 }
