@@ -2,10 +2,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // import app components
-import CardDetails from './CardDetails';
-import RegisterPage from './RegisterPage';
-import LoginPage from './LoginPage';
-import Logout from './LogoutPage';
+import CardDetails from './pages/CardDetails';
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import Logout from './pages/LogoutPage';
 
 // This component will house all routes of the app.
 

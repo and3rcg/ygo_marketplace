@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../axios';
+import axiosInstance from '../../axios';
 // import CSRFTokenElement from "../../static/scripts/getCsrfToken";
 
 function RegisterPage() {
@@ -25,13 +25,12 @@ function RegisterPage() {
         console.log(formData);
 
         axiosInstance
-            .post('register/', formData)
-            .then((response) => console.log(response))
+            .post('auth/users/', formData)
+            .then((response) => {
+                console.log(response);
+                response.status == '201' ? navigate('/login') : console.log('Invalid data.');
+            })
             .catch((err) => console.log(err));
-
-        response.status == '201'
-            ? navigate('/login')
-            : console.log('Invalid data.');
     };
 
     const handleChange = (evt) => {
@@ -98,6 +97,16 @@ function RegisterPage() {
                         class="form-control"
                         id="password"
                         placeholder="Password"
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Confirm Password</label>
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="re_password"
                         onChange={handleChange}
                     />
                 </div>

@@ -16,6 +16,7 @@ class User(AbstractUser):
     sales = models.IntegerField(null=False, blank=False, default=0, verbose_name='Sales Amount')
 
     USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email']
 
     def __str__(self) -> str:
         return str(self.username)

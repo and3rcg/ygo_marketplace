@@ -1,18 +1,22 @@
+from djoser.serializers import UserCreateSerializer
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from api.models import CardModel, User
+from api.models import CardModel
+
+User = get_user_model()
 
 class CardSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CardModel
         fields = ['url', 'name', 'type', 'description', 'image_url']
 
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
+class RegisterSerializer(UserCreateSerializer):
+    class Meta(UserCreateSerializer.Meta):
         model = User
-        fields = ['url', 'username', 'first_name', 'last_name', 'password', 'email']
+        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'email']
         extra_kwargs = {
-            'password': {'write_only': True},
+            # 'password': {'write_only': True},
             'email': {'required': True},
         }
     def create(self, validated_data):

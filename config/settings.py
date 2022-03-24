@@ -54,14 +54,31 @@ INSTALLED_APPS = [
     # third-party apps
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
+    'djoser',
 ]
 
 
 # Django REST Framework settings
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
+}
+
+# Djoser settings
+DJOSER = {
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
+    # 'SEND_ACTIVATION_EMAIL': False,
+    'SERIALIZERS': {
+        'user_create': 'api.serializers.RegisterSerializer',
+        'user': 'api.serializers.RegisterSerializer',
+        'user_delete': 'djoser.serializers.UserDeleteSerializer',
+    },
+    'USER_CREATE_PASSWORD_RETYPE': True, # the register form must contain a "re_password" field now
 }
 
 
