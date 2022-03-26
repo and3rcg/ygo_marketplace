@@ -39,38 +39,38 @@ function RegisterPage() {
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div class="form-group">
+            <form className="container mt-5" onSubmit={handleSubmit}>
+                <div className="form-group">
                     <label for="exampleInputEmail1">Username</label>
                     <input
                         type="text"
-                        class="form-control"
+                        className="form-control"
                         id="username"
                         placeholder="User name"
                         onChange={handleChange}
                     />
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                     <label for="exampleInputEmail1">E-mail address</label>
                     <input
                         type="email"
-                        class="form-control"
+                        className="form-control"
                         id="email"
                         aria-describedby="emailHelp"
                         placeholder="E-mail"
                         onChange={handleChange}
                     />
-                    <small id="emailHelp" class="form-text text-muted">
+                    <small id="emailHelp" className="form-text text-muted">
                         We'll never share your email with anyone else.
                     </small>
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                     <label for="exampleInputEmail1">First name</label>
                     <input
                         type="text"
-                        class="form-control"
+                        className="form-control"
                         id="first_name"
                         aria-describedby="emailHelp"
                         placeholder="First name"
@@ -78,11 +78,11 @@ function RegisterPage() {
                     />
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                     <label for="exampleInputEmail1">Last name</label>
                     <input
                         type="text"
-                        class="form-control"
+                        className="form-control"
                         id="last_name"
                         aria-describedby="emailHelp"
                         placeholder="Last name"
@@ -90,28 +90,28 @@ function RegisterPage() {
                     />
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                     <label for="exampleInputPassword1">Password</label>
                     <input
                         type="password"
-                        class="form-control"
+                        className="form-control"
                         id="password"
                         placeholder="Password"
                         onChange={handleChange}
                     />
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                     <label for="exampleInputPassword1">Confirm Password</label>
                     <input
                         type="password"
-                        class="form-control"
+                        className="form-control"
                         id="re_password"
                         onChange={handleChange}
                     />
                 </div>
 
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" className="btn btn-primary mt-3">
                     Register
                 </button>
             </form>

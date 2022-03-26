@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // import app components
 import CardDetails from './pages/CardDetails';
-import RegisterPage from './pages/RegisterPage';
-import LoginPage from './pages/LoginPage';
-import Logout from './pages/LogoutPage';
+import RegisterPage from './pages/Register';
+import LoginPage from './pages/Login';
+import Logout from './pages/Logout';
 
 // This component will house all routes of the app.
 

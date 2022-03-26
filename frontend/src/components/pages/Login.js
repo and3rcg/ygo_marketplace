@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../axios';
+import { connect } from 'react-redux';
+import { login } from '../../actions/auth';
 
-function LoginPage() {
+const Login = ({ login }) => {
     const navigate = useNavigate();
     const initialFormData = Object.freeze({
         username: '',
@@ -14,9 +15,10 @@ function LoginPage() {
     }, []);
 
     const [formData, setFormData] = useState(initialFormData);
+    const { username, password } = formData;
 
     const handleChange = (event) => {
-        setFormData({ ...formData, [event.target.id]: event.target.value });
+        setFormData({ ...formData, [event.target.name]: event.target.value });
     };
 
     const handleSubmit = (event) => {
@@ -24,50 +26,40 @@ function LoginPage() {
         // TODO remove this console.log later for security
         console.log(formData);
 
-        axiosInstance.post('token/', formData).then((response) => {
-            console.log(response);
-
-            localStorage.setItem('access_token', response.data.access);
-            localStorage.setItem('refresh_token', response.data.refresh);
-
-            axiosInstance.defaults.headers['Authorization'] =
-                'JWT ' + localStorage.getItem('access_token');
-
-            response.status == '200' ? navigate('/') : navigate('/login');
-        });
+        login(username, password);
     };
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
-                <div class="form-group">
+            <form className="container mt-4" onSubmit={handleSubmit}>
+                <div className="form-group">
                     <label for="exampleInputEmail1">Username</label>
                     <input
                         type="text"
-                        class="form-control"
-                        id="username"
+                        className="form-control"
+                        name="username"
                         placeholder="Username"
                         onChange={handleChange}
                     />
                 </div>
 
-                <div class="form-group">
+                <div className="form-group">
                     <label for="exampleInputPassword1">Password</label>
                     <input
                         type="password"
-                        class="form-control"
-                        id="password"
+                        className="form-control"
+                        name="password"
                         placeholder="Password"
                         onChange={handleChange}
                     />
                 </div>
 
-                <button type="submit" class="btn btn-primary">
-                    Register
+                <button type="submit" className="btn btn-primary">
+                    Log in
                 </button>
             </form>
         </div>
     );
-}
+};
 
-export default LoginPage;
+export default connect(null, { login })(Login);
