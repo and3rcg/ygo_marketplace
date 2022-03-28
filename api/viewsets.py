@@ -9,7 +9,7 @@ from .models import User, CardModel
 
 
 class CardViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = CardModel.objects.all()
     serializer_class = CardSerializer
 

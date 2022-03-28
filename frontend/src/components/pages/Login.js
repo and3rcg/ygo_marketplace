@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { login } from '../../actions/auth';
 
-const Login = ({ login }) => {
+const Login = ({ login, isAuthenticated }) => {
     const navigate = useNavigate();
     const initialFormData = Object.freeze({
         username: '',
@@ -28,6 +28,10 @@ const Login = ({ login }) => {
 
         login(username, password);
     };
+
+    if (isAuthenticated) {
+        navigate('/');
+    }
 
     return (
         <div>
@@ -62,4 +66,8 @@ const Login = ({ login }) => {
     );
 };
 
-export default connect(null, { login })(Login);
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(Login);
