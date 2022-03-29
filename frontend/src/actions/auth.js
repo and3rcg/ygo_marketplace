@@ -14,7 +14,7 @@ const API_URL = 'http://127.0.0.1:8000/api';
 // check if there is an access token in the local storage
 
 export const checkAuthenticated = () => async (dispatch) => {
-    if (localStorage.getItem('access')) {
+    if (localStorage.getItem('access_token')) {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ export const checkAuthenticated = () => async (dispatch) => {
             },
         };
 
-        const body = JSON.stringify({ token: localStorage.getItem('access') });
+        const body = JSON.stringify({ token: localStorage.getItem('access_token') });
 
         try {
             const res = await axios.post(`${API_URL}/auth/jwt/verify/`, body, config);
@@ -40,18 +40,18 @@ export const checkAuthenticated = () => async (dispatch) => {
 };
 
 export const load_user = () => async (dispatch) => {
-    if (localStorage.getItem('access')) {
+    if (localStorage.getItem('access_token')) {
         const config = {
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `JWT ${localStorage.getItem('access')}`,
+                Authorization: `JWT ${localStorage.getItem('access_token')}`,
                 Accept: 'application/json',
             },
         };
 
         try {
             const res = await axios.get(`${API_URL}/auth/users/me/`, config);
-            localStorage.setItem('payload', JSON.stringify(res.data));
+            // localStorage.setItem('payload', JSON.stringify(res.data));
 
             dispatch({
                 type: USER_LOADED_SUCCESS,

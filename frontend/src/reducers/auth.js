@@ -9,8 +9,8 @@ import {
 } from '../actions/types';
 
 const initialState = {
-    access: localStorage.getItem('access'),
-    refresh: localStorage.getItem('refresh'),
+    access: localStorage.getItem('access_token'),
+    refresh: localStorage.getItem('refresh_token'),
     isAuthenticated: null,
     user: null,
 };
@@ -24,8 +24,8 @@ export default function (state = initialState, action) {
         case AUTHENTICATED_FAIL:
             return { ...state, isAuthenticated: false };
         case LOGIN_SUCCESS:
-            localStorage.setItem('access', payload.access);
-            localStorage.setItem('refresh', payload.refresh);
+            localStorage.setItem('access_token', payload.access);
+            localStorage.setItem('refresh_token', payload.refresh);
             return {
                 ...state,
                 isAuthenticated: true,
@@ -44,8 +44,8 @@ export default function (state = initialState, action) {
             };
         case LOGIN_FAIL:
         case LOGOUT:
-            localStorage.removeItem('access');
-            localStorage.removeItem('refresh');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('refresh_token');
             return {
                 ...state,
                 access: null,

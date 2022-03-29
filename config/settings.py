@@ -85,7 +85,7 @@ DJOSER = {
 # Simple JWT settings
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=2),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=50),
     # 'REFRESH_TOKEN_LIFETIME': timedelta(seconds=10),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # tokens will stay alive for a week
     'ROTATE_REFRESH_TOKENS': True,  # users won't have to log in again if they visit within a week
