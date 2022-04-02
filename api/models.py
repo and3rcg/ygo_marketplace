@@ -4,8 +4,6 @@ from django.core.validators import MinValueValidator
 
 
 
-
-
 class User(AbstractUser):
     """
     Customize the Django authentication system
@@ -16,7 +14,7 @@ class User(AbstractUser):
     sales = models.IntegerField(null=False, blank=False, default=0, verbose_name='Sales Amount')
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email']
+    REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
 
     def __str__(self) -> str:
         return str(self.username)
@@ -72,5 +70,6 @@ class CardOnSale(models.Model):
     amount = models.IntegerField(null=False, blank=False, default=1, validators=[MinValueValidator(1)], verbose_name='Amount')
     region = models.CharField(max_length=20, choices=localization_choices, verbose_name='Region')
     condition = models.CharField(max_length=20, choices=condition_choices, verbose_name='Condition')
+    is_visible = models.BooleanField(blank=False, null=False, default=True, verbose_name="List")
 
 

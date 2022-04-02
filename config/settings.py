@@ -77,6 +77,7 @@ DJOSER = {
         'user_create': 'api.serializers.RegisterSerializer',
         'user': 'api.serializers.RegisterSerializer',
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
+        'current_user': 'api.serializers.MyUserSerializer',
     },
     'USER_CREATE_PASSWORD_RETYPE': True, # the register form must contain a "re_password" field now
 }
@@ -85,7 +86,7 @@ DJOSER = {
 # Simple JWT settings
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=50),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=6650),
     # 'REFRESH_TOKEN_LIFETIME': timedelta(seconds=10),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # tokens will stay alive for a week
     'ROTATE_REFRESH_TOKENS': True,  # users won't have to log in again if they visit within a week

@@ -1,24 +1,17 @@
-from djoser.serializers import UserCreateSerializer
+from djoser.serializers import UserCreateSerializer, UserSerializer
+from djoser.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from api.models import CardModel
+from api.models import CardModel, CardOnSale
 
 User = get_user_model()
-
-class CardSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = CardModel
-        fields = ['url', 'name', 'type', 'description', 'image_url']
 
 class RegisterSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'password', 'email']
-        extra_kwargs = {
-            # 'password': {'write_only': True},
-            'email': {'required': True},
-        }
+        
     def create(self, validated_data):
         """
         customizing the create method to encrypt the passwords
@@ -31,9 +24,24 @@ class RegisterSerializer(UserCreateSerializer):
         return instance
 
 
-# TODO remove this when done tinkering with axios
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class MyUserSerializer(UserSerializer):
+    # Customize the data provided by the /users/me/ endpoint:
     class Meta:
         model = User
-        fields = ['url', 'username', 'first_name', 'last_name', 'password', 'email']
-        
+        fields = tuple(User.REQUIRED_FIELDS) + (
+            settings.USER_ID_FIELD,
+            settings.LOGIN_FIELD,
+            'bio',
+        )
+        read_only_fields = (settings.LOGIN_FIELD,)
+
+
+class CardSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = CardModel
+        fields = ['url', 'name', 'type', 'description', 'image_url']
+
+
+class CardOnSaleSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = CardOnSale

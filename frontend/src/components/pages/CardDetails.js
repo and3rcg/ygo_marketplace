@@ -18,11 +18,16 @@ function CardDetails() {
     }, []);
 
     return (
-        <div className="container d-flex flex-row">
-            <img src={cardData.image_url} className="p-5" />
-            <div className="p-5">
-                <h1>{cardData.name}</h1>
-                <p className="cardEffect">{cardData.description}</p>
+        <div>
+            <div className="container d-flex flex-row p-5">
+                <div>
+                    <img src={cardData.image_url} className="img-responsive" />
+                    <p className="text-center text-muted">* Imagem meramente ilustrativa</p>
+                </div>
+                <div className="px-4">
+                    <h1>{cardData.name}</h1>
+                    <p className="cardEffect">{cardData.description}</p>
+                </div>
             </div>
         </div>
     );

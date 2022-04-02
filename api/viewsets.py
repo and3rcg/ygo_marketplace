@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .serializers import CardSerializer, RegisterSerializer
-from .models import User, CardModel
+from .serializers import CardSerializer
+from .models import CardModel, CardOnSale
 
 
 class CardViewSet(viewsets.ModelViewSet):
@@ -13,11 +13,11 @@ class CardViewSet(viewsets.ModelViewSet):
     queryset = CardModel.objects.all()
     serializer_class = CardSerializer
 
-class RegisterViewSet(viewsets.ModelViewSet):
-    permission_classes = [AllowAny]
-    http_method_names = ['post']
-    queryset = User.objects.all()
-    serializer_class = RegisterSerializer
+# class RegisterViewSet(viewsets.ModelViewSet):
+#     permission_classes = [AllowAny]
+#     http_method_names = ['post']
+#     queryset = User.objects.all()
+#     serializer_class = RegisterSerializer
 
 class BlacklistTokenViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]

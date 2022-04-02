@@ -1,4 +1,4 @@
-from api.viewsets import CardViewSet, RegisterViewSet, BlacklistTokenViewSet
+from api.viewsets import CardViewSet
 from rest_framework import routers
 
 api_router = routers.DefaultRouter()

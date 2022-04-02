@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// import app components
+// app components
 import CardDetails from './pages/CardDetails';
 import RegisterPage from './pages/Register';
 import LoginPage from './pages/Login';
-import Logout from './pages/Logout';
+import ProfileEdit from './pages/ProfileEdit';
 
 // This component will house all routes of the app.
 
@@ -16,9 +16,9 @@ function AppRouter() {
                 <Routes>
                     <Route path="" element={<h1>Home page</h1>} />
                     <Route path="detail/:id" element={<CardDetails />} />
-                    <Route path="register" element={<RegisterPage />} />
                     <Route path="login" element={<LoginPage />} />
-                    <Route path="logout" element={<Logout />} />
+                    <Route path="profile/edit" element={<ProfileEdit />} />
+                    <Route path="register" element={<RegisterPage />} />
                 </Routes>
             </Router>
         </div>
@@ -32,3 +32,7 @@ export default AppRouter;
 // Don't forget to add these paths to the Django URLs so it won't block you from going there!
 // <Route path="register" element={<RegistrationForm />}/>
 // import RegistrationForm from "./RegistrationForm";
+
+// <Route path="logout" element={<Logout />} />
+// <Route path=":username" element={<UserProfile />} />
+//

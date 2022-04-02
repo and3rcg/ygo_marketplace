@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 import { logout } from '../../actions/auth';
 
-const WebsiteNavbar = ({ logout, isAuthenticated }) => {
+const WebsiteNavbar = ({ logout, isAuthenticated, user }) => {
+    let username = user ? user.username : null;
     const guestLinks = () => (
         <Fragment>
             <li className="nav-item">
@@ -13,7 +14,7 @@ const WebsiteNavbar = ({ logout, isAuthenticated }) => {
                 </Nav.Link>
             </li>
             <li className="nav-item">
-                <Nav.Link className="nav-link text-light" href="/signup">
+                <Nav.Link className="nav-link text-light" href="/register">
                     Sign Up
                 </Nav.Link>
             </li>
@@ -21,11 +22,18 @@ const WebsiteNavbar = ({ logout, isAuthenticated }) => {
     );
 
     const authLinks = () => (
-        <li className="nav-item">
-            <a className="nav-link text-light" href="/" onClick={logout}>
-                Logout
-            </a>
-        </li>
+        <Fragment>
+            <li className="nav-item">
+                <Nav.Link className="nav-link text-light" href="/" onClick={logout}>
+                    Logout
+                </Nav.Link>
+            </li>
+            <li className="nav-item">
+                <Nav.Link className="nav-link text-light" href="/profile/edit">
+                    {isAuthenticated ? username : 'Profile'}
+                </Nav.Link>
+            </li>
+        </Fragment>
     );
 
     return (
@@ -53,6 +61,7 @@ const WebsiteNavbar = ({ logout, isAuthenticated }) => {
 
 const mapStateToProps = (state) => ({
     isAuthenticated: state.auth.isAuthenticated,
+    user: state.auth.user,
 });
 
 export default connect(mapStateToProps, { logout })(WebsiteNavbar);
