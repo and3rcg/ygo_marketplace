@@ -28,7 +28,7 @@ class UserAddress(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 
 class CardModel(models.Model):
-    name = models.CharField(max_length=100, null=False, blank=False, default='name', verbose_name='Name')
+    name = models.CharField(max_length=100, unique=True, null=False, blank=False, default='name', verbose_name='Name')
     attribute = models.CharField(max_length=20, null=True, blank=True, verbose_name='Attribute')
     race = models.CharField(max_length=20, null=False, blank=False, default='race', verbose_name='Class')
     level = models.IntegerField(null=True, blank=True, verbose_name='Level/Rank/Link')
@@ -37,6 +37,9 @@ class CardModel(models.Model):
     description = models.TextField(null=False, blank=False, default='desc', verbose_name='Effect/Description')
     type = models.CharField(max_length=100, null=False, blank=False, default='type', verbose_name='Type')
     image_url = models.URLField(max_length=200, null=True, blank=True)
+
+    def __str__(self) -> str:
+        return str(self.name)
 
 
 
@@ -63,13 +66,15 @@ class CardOnSale(models.Model):
 
 
     seller = models.ForeignKey(User, on_delete = models.CASCADE, default=0, verbose_name='Seller ID')
-    card = models.ForeignKey(CardModel, on_delete=models.CASCADE, verbose_name='Card ID')
+    card = models.ForeignKey(CardModel, on_delete=models.CASCADE, verbose_name='Card name')
     price = models.FloatField(null=False, blank=False, default=1, validators=[MinValueValidator(1)], verbose_name='Price')
     set = models.CharField(max_length=20,null=False, blank=False, default='XXXX-000', verbose_name='Set')
     rarity = models.CharField(max_length=40,null=False, blank=False, default='rare', verbose_name='Rarity')
     amount = models.IntegerField(null=False, blank=False, default=1, validators=[MinValueValidator(1)], verbose_name='Amount')
     region = models.CharField(max_length=20, choices=localization_choices, verbose_name='Region')
     condition = models.CharField(max_length=20, choices=condition_choices, verbose_name='Condition')
-    is_visible = models.BooleanField(blank=False, null=False, default=True, verbose_name="List")
+    is_visible = models.BooleanField(blank=False, null=False, default=True, verbose_name="Visible?")
 
-
+    def __str__(self) -> str:
+        # this returns __str__(self) from CardModel, so, it'll return the card's name (line 41)
+        return str(self.card)
