@@ -2,7 +2,8 @@
     white-space: pre-line;
 }
 
-/* img {
-    width: 100%;
-    height: 100%;
-} */
+img {
+    width: auto;
+    height: 75%;
+}
+

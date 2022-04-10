@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -9,7 +8,6 @@ from .serializers import CardSerializer, CardOnSaleSerializer
 from .models import CardModel, CardOnSale
 
 User = get_user_model()
-
 
 class BlacklistTokenViewSet(viewsets.ViewSet):
     permission_classes = [AllowAny]
@@ -23,45 +21,45 @@ class BlacklistTokenViewSet(viewsets.ViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class CardViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = CardModel.objects.all()
     serializer_class = CardSerializer
 
 class CardOnSaleViewSet(viewsets.ModelViewSet):
-    permission_classes = [AllowAny]
-    queryset = CardOnSale.objects.all().distinct('card')
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    queryset = CardOnSale.objects.filter(is_visible=True).distinct('card')
     serializer_class = CardOnSaleSerializer
 
     def get_queryset(self):
-        queryset = CardOnSale.objects.all().distinct('card')
-        card_name = self.request.query_params.get('card_name')
-        username = self.request.query_params.get('username')
-        if card_name:
-            queryset = queryset.filter(card__name=card_name)
-        if username:
-            queryset = queryset.filter(seller__username=username)
+        queryset = super().get_queryset()
+        if self.request.query_params:
+            card_name = self.request.query_params.get('card_name')
+            username = self.request.query_params.get('username')
+            card_id = self.request.query_params.get('card_id')
+            if card_name:
+                queryset = CardOnSale.objects.filter(card__name=card_name, is_visible=True)
+            if username:
+                queryset = CardOnSale.objects.filter(seller__username=username, is_visible=True)
+            if card_id:
+                queryset = CardOnSale.objects.filter(card__id=card_id, is_visible=True)
         return queryset
 
     def create(self, request, *args, **kwargs):
         card_data = request.data
-
-        new_card = CardOnSale.objects.create(
-            seller=User.objects.get(id=card_data['seller']),
-            card=CardModel.objects.get(id=card_data['card']),
-            price=card_data['price'],
-            set=card_data['set'],
-            rarity=card_data['rarity'],
-            amount=card_data['amount'],
-            region=card_data['region'],
-            condition=card_data['condition'],
-            is_visible=card_data['is_visible']
-        )
+        current_user = request.user
 
         serializer = CardOnSaleSerializer(data=card_data)
+        serializer.is_valid(raise_exception=True)
 
-        if serializer.is_valid(raise_exception=True):
-            new_card.save()
+        # control for duplicate cards by seller and card
+        _, created = CardOnSale.objects.get_or_create(
+            seller=current_user, 
+            card=card_data['card'], 
+            defaults=serializer.validated_data
+            )
+        
+        if created:
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_409_CONFLICT)
     

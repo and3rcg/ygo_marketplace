@@ -6,6 +6,8 @@ import CardDetails from './pages/CardDetails';
 import RegisterPage from './pages/Register';
 import LoginPage from './pages/Login';
 import ProfileEdit from './pages/ProfileEdit';
+import HomePage from './pages/HomePage';
+import UserProfile from './pages/UserProfile';
 
 // This component will house all routes of the app.
 
@@ -14,11 +16,12 @@ function AppRouter() {
         <div>
             <Router>
                 <Routes>
-                    <Route path="" element={<h1>Home page</h1>} />
+                    <Route path="" element={<HomePage />} />
                     <Route path="detail/:id" element={<CardDetails />} />
                     <Route path="login" element={<LoginPage />} />
                     <Route path="profile/edit" element={<ProfileEdit />} />
                     <Route path="register" element={<RegisterPage />} />
+                    <Route path="user/:username" element={<UserProfile />} />
                 </Routes>
             </Router>
         </div>

@@ -46,10 +46,9 @@ class CardOnSaleSerializer(serializers.ModelSerializer):
     # Custom fields source: the source is the name of the field in models.py!
     card_name = serializers.CharField(source='card.name', read_only=True)
     seller_name = serializers.CharField(source='seller.username', read_only=True)
+    img = serializers.CharField(source='card.image_url', read_only=True)
     class Meta:
         model = CardOnSale
         fields = '__all__'
-        extra_kwargs = {
-            'seller': {'write_only': True},
-        }
+        
     
