@@ -20,6 +20,7 @@ services:
         container_name: backend
         build: .
         # TODO add "collectstatic" django command in production
+        # python manage.py migrate &&
         command: bash -c "python manage.py migrate &&
             python manage.py runserver 0.0.0.0:8000"
         volumes:

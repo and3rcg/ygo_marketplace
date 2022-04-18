@@ -15,12 +15,7 @@ const myElement = (
     <Provider store={store}>
         <div>
             <BaseApp />
-            <h2>Pages to create:</h2>
-            <ul>
-                <li>Card list</li>
-                <li>Login/register</li>
-                <li>Card details</li>
-            </ul>
+            
         </div>
     </Provider>
 );

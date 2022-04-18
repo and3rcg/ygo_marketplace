@@ -3,15 +3,16 @@ from djoser.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from api.models import CardModel, CardOnSale
+from api.models import CardModel, CardOnSale, UserAddress, Orders
 
 User = get_user_model()
+
 
 class RegisterSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = User
         fields = ['id', 'username', 'first_name', 'last_name', 'password', 'email']
-        
+
     def create(self, validated_data):
         """
         customizing the create method to encrypt the passwords
@@ -47,8 +48,19 @@ class CardOnSaleSerializer(serializers.ModelSerializer):
     card_name = serializers.CharField(source='card.name', read_only=True)
     seller_name = serializers.CharField(source='seller.username', read_only=True)
     img = serializers.CharField(source='card.image_url', read_only=True)
+
     class Meta:
         model = CardOnSale
         fields = '__all__'
-        
-    
+
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAddress
+        fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Orders
+        fields = '__all__'

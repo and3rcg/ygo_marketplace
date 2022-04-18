@@ -19,7 +19,7 @@ function UserProfile() {
 
     return (
         <div className="container">
-            <h1>Cards on sale: </h1>
+            <h1>Cards on sale: {username}</h1>
             <div className="row">
                 {cardList.map((card) => (
                     <div className="col">

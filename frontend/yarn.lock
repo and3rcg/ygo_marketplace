@@ -4050,6 +4050,11 @@
     "watchpack" "^2.3.1"
     "webpack-sources" "^3.2.3"
 
+"weebpack@^1.0.1":
+  "integrity" "sha512-Ox0EM1mjC3It0pVmMvVVRXSkw84wXFqeBL5f53n019hbe3dJ6sO8rbFNm6PZf+VuAXVdx1mjMqKsCqLeoMKjcQ=="
+  "resolved" "https://registry.npmjs.org/weebpack/-/weebpack-1.0.1.tgz"
+  "version" "1.0.1"
+
 "which@^2.0.1", "which@^2.0.2":
   "integrity" "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA=="
   "resolved" "https://registry.npmjs.org/which/-/which-2.0.2.tgz"

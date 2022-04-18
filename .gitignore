@@ -10,3 +10,4 @@ notes/
 */__pycache__/*
 frontend/package-lock.json
 frontend/src/images/*
+venv

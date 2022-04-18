@@ -79,7 +79,7 @@ DJOSER = {
         'user_delete': 'djoser.serializers.UserDeleteSerializer',
         'current_user': 'api.serializers.MyUserSerializer',
     },
-    'USER_CREATE_PASSWORD_RETYPE': True, # the register form must contain a "re_password" field now
+    'USER_CREATE_PASSWORD_RETYPE': True,  # the register form must contain a "re_password" field now
 }
 
 

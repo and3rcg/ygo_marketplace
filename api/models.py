@@ -1,23 +1,25 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 
 
-
 class User(AbstractUser):
-    """
+    '''
     Customize the Django authentication system
     This model will use the default values from Django's authentication system, and will add some
     profile-specific fields, such as address and sales amount
-    """
+    '''
     bio = models.TextField(blank=True)
     sales = models.IntegerField(null=False, blank=False, default=0, verbose_name='Sales Amount')
+    wallet = models.FloatField(null=False, blank=False, default=0, verbose_name='Wallet funds')
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', 'first_name', 'last_name']
 
     def __str__(self) -> str:
         return str(self.username)
+
 
 class UserAddress(models.Model):
     country = models.CharField(max_length=100, verbose_name='Country')
@@ -27,20 +29,24 @@ class UserAddress(models.Model):
     zip_code = models.CharField(max_length=10, verbose_name='Zip Code')
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 
+
 class CardModel(models.Model):
-    name = models.CharField(max_length=100, unique=True, null=False, blank=False, default='name', verbose_name='Name')
+    name = models.CharField(max_length=100, unique=True, null=False,
+                            blank=False, default='name', verbose_name='Name')
     attribute = models.CharField(max_length=20, null=True, blank=True, verbose_name='Attribute')
-    race = models.CharField(max_length=20, null=False, blank=False, default='race', verbose_name='Class')
+    race = models.CharField(max_length=20, null=False, blank=False,
+                            default='race', verbose_name='Class')
     level = models.IntegerField(null=True, blank=True, verbose_name='Level/Rank/Link')
     attack = models.IntegerField(null=True, blank=True, verbose_name='ATK')
     defense = models.IntegerField(null=True, blank=True, verbose_name='DEF')
-    description = models.TextField(null=False, blank=False, default='desc', verbose_name='Effect/Description')
-    type = models.CharField(max_length=100, null=False, blank=False, default='type', verbose_name='Type')
+    description = models.TextField(null=False, blank=False,
+                                   default='desc', verbose_name='Effect/Description')
+    type = models.CharField(max_length=100, null=False, blank=False,
+                            default='type', verbose_name='Type')
     image_url = models.URLField(max_length=200, null=True, blank=True)
 
     def __str__(self) -> str:
         return str(self.name)
-
 
 
 class CardOnSale(models.Model):
@@ -64,17 +70,39 @@ class CardOnSale(models.Model):
         ('DMG', 'Damaged'),
     ]
 
-
-    seller = models.ForeignKey(User, on_delete = models.CASCADE, default=0, verbose_name='Seller ID')
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, default=0, verbose_name='Seller ID')
     card = models.ForeignKey(CardModel, on_delete=models.CASCADE, verbose_name='Card name')
-    price = models.FloatField(null=False, blank=False, default=1, validators=[MinValueValidator(1)], verbose_name='Price')
-    set = models.CharField(max_length=20,null=False, blank=False, default='XXXX-000', verbose_name='Set')
-    rarity = models.CharField(max_length=40,null=False, blank=False, default='rare', verbose_name='Rarity')
-    amount = models.IntegerField(null=False, blank=False, default=1, validators=[MinValueValidator(1)], verbose_name='Amount')
+    price = models.FloatField(null=False, blank=False, default=1, validators=[
+                              MinValueValidator(1)], verbose_name='Price')
+    set = models.CharField(max_length=20, null=False, blank=False,
+                           default='XXXX-000', verbose_name='Set')
+    rarity = models.CharField(max_length=40, null=False, blank=False,
+                              default='rare', verbose_name='Rarity')
+    amount = models.IntegerField(null=False, blank=False, default=1, validators=[
+                                 MinValueValidator(1)], verbose_name='Amount')
     region = models.CharField(max_length=20, choices=localization_choices, verbose_name='Region')
     condition = models.CharField(max_length=20, choices=condition_choices, verbose_name='Condition')
-    is_visible = models.BooleanField(blank=False, null=False, default=True, verbose_name="Visible?")
+    is_visible = models.BooleanField(blank=False, null=False, default=True, verbose_name='Visible?')
+    created_at = models.DateTimeField(default=datetime.now, verbose_name='Creation date')
 
     def __str__(self) -> str:
         # this returns __str__(self) from CardModel, so, it'll return the card's name (line 41)
         return str(self.card)
+
+
+class Orders(models.Model):
+    delivery_choices = [
+        ('Payment approved', 'Payment approved'),
+        ('In transit', 'In transit'),
+        ('Finished', 'Finished'),
+    ]
+    product = models.ForeignKey(CardOnSale, on_delete=models.RESTRICT, verbose_name='Product ID:')
+    buyer = models.ForeignKey(User, on_delete=models.RESTRICT, verbose_name='Bought by:')
+    buyer_address = models.ForeignKey(
+        UserAddress, on_delete=models.RESTRICT, verbose_name='Address')
+    amount = models.IntegerField(null=False, blank=False, default=0, verbose_name='Amount')
+    price = models.FloatField(null=False, blank=False, default=0, verbose_name='Price')
+    delivery_status = models.CharField(max_length=50, null=False, default='Payment approved',
+                                       blank=False, choices=delivery_choices, verbose_name='Status')
+    created_at = models.DateTimeField(default=datetime.now, verbose_name='Creation date')
+    updated_at = models.DateTimeField(default=datetime.now, verbose_name='Latest update')

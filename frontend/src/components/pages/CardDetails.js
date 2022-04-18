@@ -35,7 +35,7 @@ function CardDetails() {
                 <div className="row">
                     <div className="col">
                         <img src={cardData.image_url} className="img-fluid w-50 mx-auto d-block" />
-                        <p className="text-center text-muted">* Imagem meramente ilustrativa</p>
+                        <p className="text-center text-muted">* For illustration purposes only</p>
                     </div>
                     <div className="col">
                         <h1>{cardData.name}</h1>

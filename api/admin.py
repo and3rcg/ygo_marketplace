@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
 from rest_framework_simplejwt.token_blacklist import models
 from rest_framework_simplejwt.token_blacklist.admin import OutstandingTokenAdmin
 
@@ -14,4 +15,4 @@ class NewOutstandingTokenAdmin(OutstandingTokenAdmin):
 admin.site.unregister(models.OutstandingToken)
 admin.site.register(models.OutstandingToken, NewOutstandingTokenAdmin)
 
-admin.site.register(User)
+admin.site.register(User, UserAdmin)
