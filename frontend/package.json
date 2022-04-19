@@ -19,9 +19,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
     "redux": "^4.1.2",
-    "redux-thunk": "^2.4.1",
-    "webpack": "^5.69.1",
-    "webpack-cli": "^4.9.2"
+    "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.17.5",
@@ -43,6 +41,9 @@
     "sass-loader": "^12.6.0",
     "style-loader": "^3.3.1",
     "url-loader": "^4.1.1",
+    "webpack": "^5.72.0",
+    "webpack-dev-server": "^4.8.1",
+    "webpack-cli": "^4.9.2",
     "weebpack": "^1.0.1"
   }
 }
