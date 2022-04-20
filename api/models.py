@@ -29,6 +29,9 @@ class UserAddress(models.Model):
     zip_code = models.CharField(max_length=10, verbose_name='Zip Code')
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.user}: {self.street} {self.zip_code}'
+
 
 class CardModel(models.Model):
     name = models.CharField(max_length=100, unique=True, null=False,

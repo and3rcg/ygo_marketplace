@@ -8,6 +8,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import CardModel, CardOnSale, UserAddress, Orders
 from .serializers import *
+from .scripts.payment import make_transaction
 
 User = get_user_model()
 
@@ -97,48 +98,54 @@ class CardOnSaleViewSet(viewsets.ModelViewSet):
     def buy(self, request, pk=None):
         """
         what should happen once a card is bought:
-            the website (admin account) takes a 10% cut of the transaction;
+            the website (admin account) takes a 10% cut of the make_transaction;
             the seller takes the rest;
             a fixed shipping fee (5 USD) will be charged;
             deduce the amount bought off of the product's stock (and verify it's availability);
                 if the stock goes to zero: set is_visible to False, and if negative, send HTTP 400;
             deduce the order's total price off of the buyer's wallet
         """
+        # fixed shipping fee
+        shipping_fee = 5
 
         # get product data through attributes e.g. product.amount
         product = self.get_object()
 
         # get request data through the get method e.g. request.data.get('amount') data in strings
         order_data = request.data
-        amount_bought = int(order_data.get('amount'))
+        buy_amount = int(order_data.get('amount'))
+        buyer_address = UserAddress.objects.get(pk=order_data.get('address_id'))
 
-        # insert funds verification
+        order_price = buy_amount * product.price
+
         buyer = request.user
         seller = product.seller
-        admin = User.objects.get(username='admin')
 
-        order_price = amount_bought * product.price
-        order_total_price = order_price + 5  # fixed 5 USD shipping fee
+        # validations
+        if buyer_address.user != buyer:
+            return Response({'error': 'Invalid address.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        print(admin.wallet)
+        if buyer.wallet < order_price + shipping_fee:
+            return Response({'error': 'Insufficient funds.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if buyer.wallet > order_total_price:
-            if (amount_bought > 0) and (amount_bought <= product.amount):
-                admin.wallet = F('wallet') + 0.1*order_price
-                admin.save()
-                seller.wallet = F('wallet') + 0.9*order_price
-                seller.save()
-                buyer.wallet = F('wallet') - order_total_price
-                buyer.save()
-                # create order object
-                # deduce product amount (if zero then set hidden)
-                return Response(status=status.HTTP_201_CREATED)
+        if (buy_amount <= 0) or (buy_amount > product.amount):
             return Response({'error': 'Invalid amount.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({'error': 'Insufficient funds.'}, status=status.HTTP_400_BAD_REQUEST)
-        # return 400 insufficient funds
+        make_transaction(seller, buyer, order_price)
+        product.amount -= buy_amount
+        if product.amount == 0:
+            product.is_visible = False
+        product.save()
 
-        # serializer = PasswordSerializer(data=request.data)
+        Orders.objects.create(
+            product=product,
+            buyer=buyer,
+            amount=buy_amount,
+            price=order_price + shipping_fee,
+            buyer_address=buyer_address
+        )
+
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class OrderViewset(viewsets.ModelViewSet):
