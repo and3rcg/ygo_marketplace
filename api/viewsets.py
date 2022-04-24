@@ -36,8 +36,11 @@ class AddressViewSet(viewsets.ModelViewSet):
         current_user = request.user
         serializer = AddressSerializer(data=address_data)
         if serializer.is_valid(raise_exception=True):
-            address = UserAddress.objects.create(**address_data, user=current_user)
-            return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+            UserAddress.objects.create(
+                user=current_user,
+                **serializer.validated_data
+            )
+            return Response(data=serializer.validated_data, status=status.HTTP_201_CREATED)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
