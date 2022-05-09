@@ -1,4 +1,4 @@
-from api.viewsets import CardViewSet, CardOnSaleViewSet, AddressViewSet, OrderViewset
+from api.viewsets import *
 from rest_framework import routers
 
 api_router = routers.DefaultRouter()

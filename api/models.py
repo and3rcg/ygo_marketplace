@@ -1,7 +1,8 @@
 from datetime import datetime
-from django.db import models
+
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
+from django.db import models
 
 
 class User(AbstractUser):
@@ -73,16 +74,12 @@ class CardOnSale(models.Model):
         ('DMG', 'Damaged'),
     ]
 
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, default=0, verbose_name='Seller ID')
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, default=0, verbose_name='Seller')
     card = models.ForeignKey(CardModel, on_delete=models.CASCADE, verbose_name='Card name')
-    price = models.FloatField(null=False, blank=False, default=1, validators=[
-                              MinValueValidator(1)], verbose_name='Price')
-    set = models.CharField(max_length=20, null=False, blank=False,
-                           default='XXXX-000', verbose_name='Set')
-    rarity = models.CharField(max_length=40, null=False, blank=False,
-                              default='rare', verbose_name='Rarity')
-    amount = models.IntegerField(null=False, blank=False, default=1, validators=[
-                                 MinValueValidator(1)], verbose_name='Amount')
+    price = models.FloatField(null=False, blank=False, default=1, validators=[MinValueValidator(1)])
+    set = models.CharField(max_length=20, null=False, blank=False, default='XXXX-000', verbose_name='Set')
+    rarity = models.CharField(max_length=40, null=False, blank=False, default='rare')
+    amount = models.IntegerField(null=False, blank=False, default=1, validators=[MinValueValidator(1)], verbose_name='Amount')
     region = models.CharField(max_length=20, choices=localization_choices, verbose_name='Region')
     condition = models.CharField(max_length=20, choices=condition_choices, verbose_name='Condition')
     is_visible = models.BooleanField(blank=False, null=False, default=True, verbose_name='Visible?')
@@ -90,22 +87,42 @@ class CardOnSale(models.Model):
 
     def __str__(self) -> str:
         # this returns __str__(self) from CardModel, so, it'll return the card's name (line 41)
-        return str(self.card)
+        return f'{str(self.card)} sold by {str(self.seller)}'
 
 
 class Orders(models.Model):
-    delivery_choices = [
-        ('Payment approved', 'Payment approved'),
-        ('In transit', 'In transit'),
-        ('Finished', 'Finished'),
-    ]
-    product = models.ForeignKey(CardOnSale, on_delete=models.RESTRICT, verbose_name='Product ID:')
-    buyer = models.ForeignKey(User, on_delete=models.RESTRICT, verbose_name='Bought by:')
-    buyer_address = models.ForeignKey(
-        UserAddress, on_delete=models.RESTRICT, verbose_name='Address')
-    amount = models.IntegerField(null=False, blank=False, default=0, verbose_name='Amount')
-    price = models.FloatField(null=False, blank=False, default=0, verbose_name='Price')
-    delivery_status = models.CharField(max_length=50, null=False, default='Payment approved',
-                                       blank=False, choices=delivery_choices, verbose_name='Status')
+    customer = models.ForeignKey(User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        verbose_name='Customer',
+        related_name='customer',
+        )
+    seller = models.ForeignKey(User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        verbose_name='Seller',
+        related_name='seller',
+        )
+    complete = models.BooleanField(default=False) # if complete == False: cart can be updated
+    customer_address = models.ForeignKey(UserAddress, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(default=datetime.now, verbose_name='Creation date')
     updated_at = models.DateTimeField(default=datetime.now, verbose_name='Latest update')
+    transaction_id = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    shipping_fee = models.IntegerField(default=5, blank=True, null=True, verbose_name='Shipping fee')
+    
+    def __str__(self) -> str:
+        return self.transaction_id
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Orders, on_delete=models.CASCADE, null=True)
+    product = models.ForeignKey(CardOnSale, on_delete=models.SET_NULL, null=True)
+    amount = models.IntegerField(null=False, blank=False, default=0)
+    price = models.FloatField(null=False, blank=False, default=0)
+    date_added = models.DateTimeField(default=datetime.now)
+
+    def __str__(self) -> str:
+        return f'{self.product.__str__()} ({self.order.__str__()})'
+

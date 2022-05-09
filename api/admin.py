@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from rest_framework_simplejwt.token_blacklist import models
 from rest_framework_simplejwt.token_blacklist.admin import OutstandingTokenAdmin
 
-from .models import User, CardOnSale, UserAddress, Orders
+from .models import User, CardOnSale, UserAddress, Orders, OrderItem
 
 
 class NewOutstandingTokenAdmin(OutstandingTokenAdmin):
@@ -23,7 +23,7 @@ class MyUserAdmin(UserAdmin):
 @admin.register(CardOnSale)
 class CardOnSaleAdmin(admin.ModelAdmin):
     fields = ('card', 'seller', 'price', 'amount', 'is_visible')
-    list_display = ('card', 'seller', 'price', 'amount', 'is_visible')
+    list_display = ('card', 'id', 'seller', 'price', 'amount', 'is_visible')
 
 
 @admin.register(UserAddress)
@@ -33,8 +33,11 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(Orders)
 class OrdersAdmin(admin.ModelAdmin):
-    list_display = ('product', 'price', 'buyer_address', 'delivery_status', 'updated_at',
-                    'created_at')
+    list_display = ('transaction_id', 'id', 'customer', 'seller', 'created_at', 'complete')
+
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ('order', 'product', 'amount', 'price', 'date_added')
 
 
 admin.site.unregister(models.OutstandingToken)

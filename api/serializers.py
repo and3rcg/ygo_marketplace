@@ -3,7 +3,7 @@ from djoser.conf import settings
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from api.models import CardModel, CardOnSale, UserAddress, Orders
+from api.models import CardModel, CardOnSale, UserAddress, Orders, OrderItem
 
 User = get_user_model()
 
@@ -60,7 +60,14 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class OrderItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderItem
+        fields = '__all__'
+
+
 class OrderSerializer(serializers.ModelSerializer):
+    items = OrderItemSerializer(many=True, read_only=True)
     class Meta:
         model = Orders
         fields = '__all__'
