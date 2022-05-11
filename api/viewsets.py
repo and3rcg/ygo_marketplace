@@ -70,26 +70,13 @@ class CardOnSaleViewSet(viewsets.ModelViewSet):
 
         if self.request.query_params:
             query_params = self.request.query_params
-            url_params = {'is_visible': True} # default
+            url_params = {'is_visible': True}  # default
 
             for item in query_params:
                 if item in filters_mapping:
                     query_kwarg = filters_mapping.get(item)
                     url_params[query_kwarg] = query_params.get(item)
             queryset = CardOnSale.objects.filter(**url_params)
-
-            # card_name = query_params.get('card_name')
-            # username = query_params.get('username')
-            # card_id = query_params.get('card_id')
-
-            # if card_name: # use "__icontains" for search?
-            #     queryset = CardOnSale.objects.filter(card__name__icontains=card_name, is_visible=True)
-
-            # if username: # get all cards sold by a specific user
-            #     queryset = CardOnSale.objects.filter(seller__username=username, is_visible=True)
-
-            # if card_id: # get all users selling a specific card
-            #     queryset = CardOnSale.objects.filter(card__id=card_id, is_visible=True)
 
         return queryset
 
@@ -116,41 +103,43 @@ class CardOnSaleViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def add_to_cart(self, request, pk=None):
         """
-        what should happen once a card is bought:
-            the website (admin account) takes a 10% cut of the make_transaction;
-            the seller takes the rest;
-            a fixed shipping fee (5 USD) will be charged;
-            deduce the amount bought off of the product's stock (and verify it's availability);
-                if the stock goes to zero: set is_visible to False, and if negative, send HTTP 400;
-            deduce the order's total price off of the customer's wallet
+        add to cart algorithm:
+            get basic data e.g. object, customer, seller, amount ordered, etc;
+            validate the amount ordered (if it's more than what's available, return bad request);
+            create (or get) an incomplete order by the customer for the seller;
+            create an OrderItem object with the card added to the cart;
+            return a JSON with the order's data.
         """
+        customer = request.user
+
         # get product data through attributes e.g. product.amount
         product = self.get_object()
+        seller = product.seller
 
         # get request data through the get method e.g. request.data.get('amount') data in strings
         order_data = request.data
         buy_amount = int(order_data.get('amount'))
 
-        customer = request.user
-        seller = product.seller
+        if buy_amount > product.amount:
+            return Response(data={'error': 'Invalid amount.'}, status=status.HTTP_400_BAD_REQUEST)
 
         order_price = buy_amount * product.price
 
         # create an order for each seller
         order, created = Orders.objects.get_or_create(
-            customer = customer,
-            seller = seller,
-            complete = False,
-            defaults = {'transaction_id': generate_transaction_id(10)}
+            customer=customer,
+            seller=seller,
+            complete=False,
+            defaults={'transaction_id': generate_transaction_id(10)}
         )
 
         cart_item = OrderItem.objects.create(
-            order = order,
-            product = product,
-            amount = buy_amount,
-            price = order_price,
+            order=order,
+            product=product,
+            amount=buy_amount,
+            total_price=order_price,
         )
-        
+
         serialized_order = OrderSerializer(order)
 
         if created:
@@ -168,41 +157,63 @@ class OrderViewset(viewsets.ModelViewSet):
         queryset = Orders.objects.filter(customer=self.request.user)
         return queryset
 
+    @action(methods=['get'], detail=False)
+    def shopping_cart(self, request):
+        """
+        shopping cart algorithm:
+            get all incomplete orders from the current user;
+            get all OrderItems from each incomplete order;
+            return a dict in the format{'transaction_id': [OrderItem list from that order]}.
+        """
+        current_user = request.user
+        order_list = Orders.objects.filter(customer=current_user, complete=False)
+        shopping_cart = {}
+
+        for order in order_list:
+            order_qs = OrderItem.objects.filter(order=order)
+            order_serializer = OrderItemSerializer(order_qs, many=True)
+            shopping_cart[order.transaction_id] = order_serializer.data
+
+        return Response(data=shopping_cart, status=status.HTTP_200_OK)
+
     @action(methods=['post'], detail=True)
     # TODO create a checkout endpoint action to add address and set complete to True
     def checkout(self, request, pk=None):
         """
-        what should happen here: 
-            filter cards bought by seller
-            set address in the Order object
-            apply shipping fee
-            apply validations and make the transaction
+        checkout algorithm:
+            get the current order and get all OrderItem objects from this order;
+            set the address ID from the request in the current order;
+            apply shipping fee (user should choose between fixed price and some shipping service);
+            apply validations for amount, address ID and wallet funds (fail returns bad request);
+            deduce the total price (order + shipping) from the customer's wallet;
+            add 90% of the order's price to the seller;
+            add 10% of the order's price to the admin (website's cut on all transactions).
         """
         current_order = self.get_object()
         # get customer data
         customer = current_order.customer
         address_id = int(request.data.get('address_id'))
         address = UserAddress.objects.get(pk=address_id)
-        
-        seller = current_order.seller # get seller object
+
+        seller = current_order.seller  # get seller object
 
         if current_order.complete is True:
-            return Response(data={'error': 'Order is already complete!'}, status = status.HTTP_400_BAD_REQUEST)
-        
+            return Response(data={'error': 'Order is already complete!'}, status=status.HTTP_400_BAD_REQUEST)
+
         order_items = OrderItem.objects.filter(order=current_order)
         order_price = 0
 
         # checkout validations
         for item in order_items:
             if item.amount > item.product.amount:
-                return Response(data={'error': 'Invalid amount.'}, status = status.HTTP_400_BAD_REQUEST)
+                return Response(data={'error': 'Invalid amount.'}, status=status.HTTP_400_BAD_REQUEST)
             order_price += item.amount * item.price
-        
+
         if address.user != customer:
-            return Response(data={'error': 'Invalid address data.'}, status = status.HTTP_400_BAD_REQUEST)
-        
+            return Response(data={'error': 'Invalid address data.'}, status=status.HTTP_400_BAD_REQUEST)
+
         if order_price + current_order.shipping_fee > customer.wallet:
-            return Response(data={'error': 'Insufficient funds.'}, status = status.HTTP_400_BAD_REQUEST)
+            return Response(data={'error': 'Insufficient funds.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # transaction process
         for item in order_items:
@@ -212,7 +223,6 @@ class OrderViewset(viewsets.ModelViewSet):
                 item.product.is_visible = False
             item.product.save()
 
-        
         # transaction: admin (the website) takes a 10% cut
         admin = User.objects.get(username='admin')
         shipping_fee = current_order.shipping_fee

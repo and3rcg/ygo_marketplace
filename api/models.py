@@ -77,9 +77,11 @@ class CardOnSale(models.Model):
     seller = models.ForeignKey(User, on_delete=models.CASCADE, default=0, verbose_name='Seller')
     card = models.ForeignKey(CardModel, on_delete=models.CASCADE, verbose_name='Card name')
     price = models.FloatField(null=False, blank=False, default=1, validators=[MinValueValidator(1)])
-    set = models.CharField(max_length=20, null=False, blank=False, default='XXXX-000', verbose_name='Set')
+    set = models.CharField(max_length=20, null=False, blank=False,
+                           default='XXXX-000', verbose_name='Set')
     rarity = models.CharField(max_length=40, null=False, blank=False, default='rare')
-    amount = models.IntegerField(null=False, blank=False, default=1, validators=[MinValueValidator(1)], verbose_name='Amount')
+    amount = models.IntegerField(null=False, blank=False, default=1, validators=[
+                                 MinValueValidator(1)], verbose_name='Amount')
     region = models.CharField(max_length=20, choices=localization_choices, verbose_name='Region')
     condition = models.CharField(max_length=20, choices=condition_choices, verbose_name='Condition')
     is_visible = models.BooleanField(blank=False, null=False, default=True, verbose_name='Visible?')
@@ -91,27 +93,28 @@ class CardOnSale(models.Model):
 
 
 class Orders(models.Model):
-    customer = models.ForeignKey(User, 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        blank=True, 
-        verbose_name='Customer',
-        related_name='customer',
-        )
-    seller = models.ForeignKey(User, 
-        on_delete=models.SET_NULL, 
-        null=True, 
-        blank=True, 
-        verbose_name='Seller',
-        related_name='seller',
-        )
-    complete = models.BooleanField(default=False) # if complete == False: cart can be updated
+    customer = models.ForeignKey(User,
+                                 on_delete=models.SET_NULL,
+                                 null=True,
+                                 blank=True,
+                                 verbose_name='Customer',
+                                 related_name='customer',
+                                 )
+    seller = models.ForeignKey(User,
+                               on_delete=models.SET_NULL,
+                               null=True,
+                               blank=True,
+                               verbose_name='Seller',
+                               related_name='seller',
+                               )
+    complete = models.BooleanField(default=False)  # if complete == False: cart can be updated
     customer_address = models.ForeignKey(UserAddress, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(default=datetime.now, verbose_name='Creation date')
     updated_at = models.DateTimeField(default=datetime.now, verbose_name='Latest update')
     transaction_id = models.CharField(max_length=100, unique=True, blank=True, null=True)
-    shipping_fee = models.IntegerField(default=5, blank=True, null=True, verbose_name='Shipping fee')
-    
+    shipping_fee = models.IntegerField(
+        default=5, blank=True, null=True, verbose_name='Shipping fee')
+
     def __str__(self) -> str:
         return self.transaction_id
 
@@ -120,9 +123,8 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Orders, on_delete=models.CASCADE, null=True)
     product = models.ForeignKey(CardOnSale, on_delete=models.SET_NULL, null=True)
     amount = models.IntegerField(null=False, blank=False, default=0)
-    price = models.FloatField(null=False, blank=False, default=0)
+    total_price = models.FloatField(null=False, blank=False, default=0)
     date_added = models.DateTimeField(default=datetime.now)
 
     def __str__(self) -> str:
         return f'{self.product.__str__()} ({self.order.__str__()})'
-

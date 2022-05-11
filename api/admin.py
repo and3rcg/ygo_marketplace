@@ -35,9 +35,10 @@ class AddressAdmin(admin.ModelAdmin):
 class OrdersAdmin(admin.ModelAdmin):
     list_display = ('transaction_id', 'id', 'customer', 'seller', 'created_at', 'complete')
 
+
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ('order', 'product', 'amount', 'price', 'date_added')
+    list_display = ('order', 'product', 'amount', 'total_price', 'date_added')
 
 
 admin.site.unregister(models.OutstandingToken)
