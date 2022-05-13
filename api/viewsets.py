@@ -65,8 +65,8 @@ class CardOnSaleViewSet(viewsets.ModelViewSet):
     serializer_class = CardOnSaleSerializer
 
     def get_queryset(self):
+        # ensure the re-evaluation of the queryset on each request
         queryset = super().get_queryset()
-        # make a mapping of query params: https://github.com/manjitkumar/drf-url-filters
 
         if self.request.query_params:
             query_params = self.request.query_params
