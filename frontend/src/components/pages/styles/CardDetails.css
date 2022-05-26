@@ -1,9 +1,17 @@
-.cardEffect {
+.card-effect {
     white-space: pre-line;
 }
 
-img {
-    width: auto;
-    height: 75%;
+.user {
+    font-weight: 700;
+    color: rgb(0, 110, 74);
 }
 
+.card-img {
+    max-width: 50%;
+}
+
+td {
+    align-items: center;
+    vertical-align: middle;
+}

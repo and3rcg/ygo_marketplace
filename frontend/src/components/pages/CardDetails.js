@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-// import { connect } from 'react-redux';
 
 import axiosInstance from '../../axios';
+import OrderCardModal from './OrderCardModal';
 
 import './styles/CardDetails.css';
 
@@ -27,35 +27,38 @@ function CardDetails() {
             .then((response) => setSellersData(response.data));
         axiosInstance.get(`${API_URL}/card/${id}/`).then((response) => setCardData(response.data));
     }, []);
-    console.log(sellersData);
 
     return (
         <div>
             <div className="container">
                 <div className="row">
                     <div className="col">
-                        <img src={cardData.image_url} className="img-fluid w-50 mx-auto d-block" />
+                        <img src={cardData.image_url} className="card-img mx-auto d-block" />
                         <p className="text-center text-muted">* For illustration purposes only</p>
                     </div>
                     <div className="col">
                         <h1>{cardData.name}</h1>
-                        <p className="cardEffect">{cardData.description}</p>
-                        {/* put this table in an if statement to avoid blank tables */}
-                        <h2>Sellers:</h2>
+                        <p className="text-muted">{cardData.type}</p>
+                        <p className="card-effect">{cardData.description}</p>
+                        {/* TODO: put this table in an if statement to avoid blank tables */}
+                        <h2>Listings:</h2>
                         <table className="table table-striped">
                             <tbody>
                                 {sellersData.map((product) => (
                                     <tr>
-                                        <th scope="row">
-                                            <a href={`/user/${product.seller_name}`}>
+                                        <td scope="row">
+                                            <a href={`/user/${product.seller_name}`} class="user">
                                                 {product.seller_name}
                                             </a>
-                                        </th>
+                                        </td>
                                         <td>{product.condition}</td>
                                         <td>{product.region}</td>
                                         <td>{product.set}</td>
+                                        <td>{product.amount} left</td>
                                         <td>{usdFormat(product.price)}</td>
-                                        <td>(PH) Buy</td>
+                                        <td>
+                                            <OrderCardModal id={product.id} />
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>

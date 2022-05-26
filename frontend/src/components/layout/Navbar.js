@@ -51,7 +51,6 @@ const WebsiteNavbar = ({ logout, isAuthenticated, user }) => {
                             Card test
                         </Nav.Link>
                         {isAuthenticated ? authLinks() : guestLinks()}
-                        <div className="text-light">(PH)Wishlist</div>
                     </Nav>
                 </Container>
             </Navbar>

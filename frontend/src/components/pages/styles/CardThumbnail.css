@@ -1,6 +1,6 @@
-img {
-    width: auto;
-    height: 25%;
+.card {
+    max-width: 15rem;
+    margin: auto;
 }
 
 .price {

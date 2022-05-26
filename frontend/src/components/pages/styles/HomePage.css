@@ -1,6 +1,5 @@
 .card-list {
     display: flex;
-    background-color: black;
     flex-wrap: wrap;
     align-content: space-around;
     max-width: 80%;

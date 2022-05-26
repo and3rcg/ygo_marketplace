@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../axios';
-// import CSRFTokenElement from "../../static/scripts/getCsrfToken";
 
 function RegisterPage() {
     const navigate = useNavigate();
@@ -21,8 +20,6 @@ function RegisterPage() {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // TODO remove this console.log later for security
-        console.log(formData);
 
         axiosInstance
             .post('auth/users/', formData)

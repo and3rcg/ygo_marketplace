@@ -23,9 +23,6 @@ const Login = ({ login, isAuthenticated }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // TODO remove this console.log later for security
-        console.log(formData);
-
         login(username, password);
     };
 
